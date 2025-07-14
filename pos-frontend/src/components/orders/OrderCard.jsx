@@ -46,7 +46,7 @@ const OrderCard = ({ order, onClick }) => {
                         <h1 className="text-[#f5f5f5] text-lg font-semibold tracking-wide">
                             {order.customerDetails.name}
                         </h1>
-                        <p className="text-[#ababab] text-sm">#{Math.floor(new Date(order.orderDate).getTime())} / Dine in</p>
+                        <p className="text-[#ababab] text-sm">#{order._id} / Dine in</p>
                         <p className="text-[#ababab] text-sm">Table <FaLongArrowAltRight className="text-[#ababab] ml-2 inline" />{order.table?.tableNo} </p>
                     </div>
                     <div className="flex flex-col items-end gap-2">

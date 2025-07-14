@@ -103,7 +103,7 @@ const Payments = () => {
                                     key={index}
                                     className="border-b border-gray-600 hover:bg-[#333]"
                                 >
-                                    <td className="p-4">#{Math.floor(new Date(order.orderDate).getTime())}</td>
+                                    <td className="p-4">#{order._id}</td>
                                     <td className="p-4">{order.customerDetails?.name || 'N/A'}</td>
                                     <td className="p-4">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${

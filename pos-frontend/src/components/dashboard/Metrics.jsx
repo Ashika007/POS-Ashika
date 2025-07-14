@@ -10,8 +10,7 @@ const Metrics = () => {
                         Overall Performance
                     </h2>
                     <p className="text-sm text-[#ababab]">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                        Distinctio, obcaecati?
+                        The overall performace rate of the cafe :
                     </p>
                 </div>
                 <button className="flex items-center gap-1 px-4 py-2 rounded-md text-[#f5f5f5] bg-[#1a1a1a]">
@@ -74,8 +73,7 @@ const Metrics = () => {
                         Item Details
                     </h2>
                     <p className="text-sm text-[#ababab]">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                        Distinctio, obcaecati?
+                        The item details are displayed as:
                     </p>
                 </div>
 

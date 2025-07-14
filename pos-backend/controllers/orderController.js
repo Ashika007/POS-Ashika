@@ -52,6 +52,8 @@ const getOrderById = async (req, res, next) => {
 const getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find().populate('table');
+    // Log all order IDs being sent to the frontend
+    console.log("Orders sent to frontend:", orders.map(o => o._id.toString()));
     res.status(200).json({ data: orders });
   } catch (error) {
     next(error);

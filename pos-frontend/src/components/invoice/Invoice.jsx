@@ -65,7 +65,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
                     <div className="mt-4 border-t pt-4 text-sm text-gray-700">
                         <p>
                             <strong>Order ID:</strong>{" "}
-                            {Math.floor(new Date(orderInfo.orderDate).getTime())}
+                            {orderInfo._id}
                         </p>
                         <p>
                             <strong>Name:</strong> {orderInfo.customerDetails.name}
