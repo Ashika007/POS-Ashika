@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../../redux/slices/cartSlice";
-import { addOrder, updateTable } from "../../https/index";
+import { addOrder, updateOrder, updateTable } from "../../https/index";
 import { enqueueSnackbar } from "notistack";
 import { useMutation } from "@tanstack/react-query";
 import { removeAllItems } from "../../redux/slices/cartSlice";
@@ -11,7 +11,7 @@ import paymentQR from "../../assets/images/paymentQR.jpg"; // Adjust the import 
 
 
 
-const Bill = () => {
+const Bill = ({ isEditing, originalOrderId, previousOrder }) => {
     const dispatch = useDispatch();
 
     const customerData = useSelector((state) => state.customer);
@@ -27,6 +27,25 @@ const Bill = () => {
     const [showQRImage, setShowQRImage] = useState(false);
     const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
 
+    // Helper to get correct customer details
+    const getCustomerDetails = () => {
+        if (isEditing && previousOrder && previousOrder.customerDetails) {
+            // If Redux state is empty, use previousOrder's details
+            if (!customerData.customerName && !customerData.customerPhone && !customerData.guests) {
+                return {
+                    name: previousOrder.customerDetails.name,
+                    phone: previousOrder.customerDetails.phone,
+                    guests: previousOrder.customerDetails.guests,
+                };
+            }
+        }
+        // Otherwise, use Redux state
+        return {
+            name: customerData.customerName,
+            phone: customerData.customerPhone,
+            guests: customerData.guests,
+        };
+    };
 
     const handlePlaceOrder = async () => {
         if (!paymentMethod) {
@@ -37,27 +56,13 @@ const Bill = () => {
             return;
         }
 
-
-
-
         if (paymentMethod === "Online") {
-
             // display QR code for online payment
-
-
             return;
-
-
-
-
         } else {
-            // Place the order
+            // Place the order or update existing order
             const orderData = {
-                customerDetails: {
-                    name: customerData.customerName,
-                    phone: customerData.customerPhone,
-                    guests: customerData.guests,
-                },
+                customerDetails: getCustomerDetails(),
                 orderStatus: "In Progress",
                 bills: {
                     total: total,
@@ -68,7 +73,12 @@ const Bill = () => {
                 table: customerData.table.tableId,
                 paymentMethod: paymentMethod,
             };
-            orderMutation.mutate(orderData);
+
+            if (isEditing) {
+                orderUpdateMutation.mutate({ orderId: originalOrderId, data: orderData });
+            } else {
+                orderMutation.mutate(orderData);
+            }
         }
     };
 
@@ -101,10 +111,33 @@ const Bill = () => {
         },
     });
 
+    const orderUpdateMutation = useMutation({
+        mutationFn: ({ orderId, data }) => updateOrder(orderId, data),
+        onSuccess: (resData) => {
+            const { data } = resData.data;
+            console.log(data)
+            setOrderInfo(data);
+
+            enqueueSnackbar("Order Updated!", {
+                variant: "success",
+            });
+
+            setShowInvoice(true);
+        },
+        onError: (error) => {
+            console.log(error);
+            enqueueSnackbar("Failed to update order", {
+                variant: "error",
+            });
+        },
+    });
+
     const tableUpdateMutation = useMutation({
         mutationFn: (reqData) => updateTable(reqData),
         onSuccess: () => {
-            dispatch(removeCustomer());
+            if (!isEditing) {
+                dispatch(removeCustomer());
+            }
             dispatch(removeAllItems());
         },
         onError: (error) => {
@@ -116,7 +149,7 @@ const Bill = () => {
         <>
             <div className="flex items-center justify-between px-5 mt-2">
                 <p className="text-xs text-[#ababab] font-medium mt-2">
-                    Items({cartData.lenght})
+                    Items({cartData.length})
                 </p>
                 <h1 className="text-[#f5f5f5] text-md font-bold">
                     Rs.{total.toFixed(2)}
@@ -180,7 +213,6 @@ const Bill = () => {
                                     setShowQRImage(false);
                                     setIsPaymentConfirmed(false);
                                 }}
-                                className="mt-3 text-sm text-gray-400 hover:text-white"
                                 className="bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] font-semibold"
                             >
                                 Cancel
@@ -199,7 +231,7 @@ const Bill = () => {
                     onClick={handlePlaceOrder}
                     className="bg-[#f6b100] px-4 py-3 w-full rounded-lg text-[#1f1f1f] font-semibold text-lg"
                 >
-                    Place Order
+                    {isEditing ? 'Update Order' : 'Place Order'}
                 </button>
 
 

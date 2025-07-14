@@ -64,7 +64,7 @@ const RecentOrders = () => {
                                 className="border-b border-gray-600 hover:bg-[#333]"
                             >
                                 <td className="p-4">#{Math.floor(new Date(order.orderDate).getTime())}</td>
-                                <td className="p-4">{order.customerDetails.name}</td>
+                                <td className="p-4">{order.customerDetails?.name || 'N/A'}</td>
                                 <td className="p-4">
                                     <select
                                         className={`bg-[#1a1a1a] text-[#f5f5f5] border border-gray-500 p-2 rounded-lg focus:outline-none ${order.orderStatus === "Ready"
@@ -84,7 +84,7 @@ const RecentOrders = () => {
                                 </td>
                                 <td className="p-4">{formatDateAndTime(order.orderDate)}</td>
                                 <td className="p-4">{order.items.length} Items</td>
-                                <td className="p-4">Table - {order.table?.tableNo}</td>
+                                <td className="p-4">Table - {order.table?.tableNo || 'N/A'}</td>
                                 <td className="p-4">Rs.{order.bills.totalWithTax}</td>
                                 <td className="p-4">
                                     {order.paymentMethod}

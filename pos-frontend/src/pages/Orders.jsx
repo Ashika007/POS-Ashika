@@ -4,12 +4,14 @@ import OrderCard from '../components/orders/OrderCard'
 import BackButton from '../components/shared/BackButton'
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getOrders } from '../https/index'
+import OrderDetailsModal from '../components/orders/OrderDetailsModal';
 import { enqueueSnackbar } from 'notistack'
 import { useEffect } from 'react';
 
 const Orders = () => {
 
     const [status, setStatus] = useState("all");
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
         document.title = "POS | Orders"
@@ -26,6 +28,7 @@ const Orders = () => {
     if (isError) {
         enqueueSnackbar("Something went wrong!", { variant: "error" })
     }
+    console.log("Fetched orders data:", resData);
 
 
     return (
@@ -54,8 +57,8 @@ const Orders = () => {
 
             <div className="flex flex-wrap gap-6 px-12 py-4 overflow-y-scroll scrollbar-hide h-[calc(100vh-5rem-5rem)]">
                 {
-                    resData?.data.data.length > 0 ? (
-                        resData.data.data.map((order) => {
+                    resData?.data.data.filter(order => order.customerDetails?.name).length > 0 ? (
+                        resData.data.data.filter(order => order.customerDetails?.name).map((order) => {
                             return <OrderCard key={order._id} order={order} />
                         })
                     ) : <p className="col-span-3 text-gray-500">No orders available, please create order.</p>
@@ -63,6 +66,12 @@ const Orders = () => {
             </div>
 
             <BottomNav />
+            {selectedOrder && (
+                <OrderDetailsModal
+                    order={selectedOrder}
+                    onClose={() => setSelectedOrder(null)}
+                />
+            )}
         </section>
     )
 }

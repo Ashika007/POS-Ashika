@@ -4,7 +4,7 @@ import Greetings from '../components/home/Greetings';
 import MiniCard from '../components/home/MiniCard';
 import RecentOrders from '../components/home/RecentOrders';
 import PopularDrinks from '../components/home/popularDrinks';
-import { FaRupeeSign } from "react-icons/fa";
+import { FaRupeeSign } from "react-icons/fa6";
 import { GrInProgress } from "react-icons/gr";
 
 const Home = () => {

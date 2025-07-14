@@ -13,6 +13,7 @@ const MenuContainer = () => {
     const [itemId, setItemId] = useState();
     const dispatch = useDispatch();
 
+
     const increment = (id) => {
         setItemId(id);
         if (itemCount >= 4) return;
@@ -29,7 +30,7 @@ const MenuContainer = () => {
         if (itemCount === 0) return;
 
         const { name, price } = item;
-        const newObj = { id: new Date(), name, pricePerQuantity: price, quantity: itemCount, price: price * itemCount };
+        const newObj = { id: new Date().getTime() + Math.random(), name, pricePerQuantity: price, quantity: itemCount, price: price * itemCount };
 
         dispatch(addItems(newObj));
         setItemCount(0);

@@ -17,7 +17,6 @@ const BottomNav = () => {
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [guestCount, setGuestCount] = useState(0);
    const [name, setName] = useState();
-   const [phone, setPhone] = useState();
 
    const openModal = () => setIsModalOpen(true);
    const closeModal = () => setIsModalOpen(false);
@@ -35,7 +34,7 @@ const BottomNav = () => {
 
    const handleCreateOrder = () => {
       // send the data to store
-      dispatch(setCustomer({ name, phone, guests: guestCount }));
+      dispatch(setCustomer({ name, guests: guestCount }));
       navigate("/tables");
    }
 
@@ -79,12 +78,6 @@ const BottomNav = () => {
                <label className="block text-[#ababab] mb-2 text-sm font-medium">Customer Name</label>
                <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
                   <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="" placeholder="Enter customer name" id="" className="bg-transparent flex-1 text-white focus:outline-none" />
-               </div>
-            </div>
-            <div>
-               <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">Customer Phone</label>
-               <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
-                  <input value={phone} onChange={(e) => setPhone(e.target.value)} type="number" name="" placeholder="+91-9999999999" id="" className="bg-transparent flex-1 text-white focus:outline-none" />
                </div>
             </div>
             <div>

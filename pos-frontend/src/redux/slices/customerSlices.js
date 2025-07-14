@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   orderId: '',
   customerName: '',
-  customerPhone: '',
   guests: 0,
   table: '',
 };
@@ -13,18 +12,16 @@ const customerSlice = createSlice({
   initialState,
   reducers: {
     setCustomer: (state, action) => {
-      const { name, phone, guests } = action.payload;
+      const { name, guests } = action.payload;
       state.orderId = `${Date.now()}`;
       state.customerName = name;
-      state.customerPhone = phone;
       state.guests = guests;
     },
 
     removeCustomer: (state) => {
-      (state.customerName = ''),
-        (state.customerPhone = ''),
-        (state.guests = 0),
-        (state.table = '');
+      state.customerName = '';
+      state.guests = 0;
+      state.table = '';
     },
 
     updateTable: (state, action) => {

@@ -4,13 +4,29 @@ import { getAvatarName, getBgColor } from "../../utils"
 import { useDispatch } from "react-redux";
 import { updateTable } from "../../redux/slices/customerSlices";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import { updateTable as updateTableApi } from '../../https';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
 
-const TableCard = ({ id, name, status, initials, seats }) => {
+const TableCard = ({ id, name, status, initials, seats, orderStatus }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const { mutate: clearTable } = useMutation({
+        mutationFn: () => updateTableApi({ tableId: id, status: 'Available', currentOrder: null }),
+        onSuccess: () => {
+            enqueueSnackbar('Table cleared!', { variant: 'success' });
+            queryClient.invalidateQueries(['tables']);
+            queryClient.invalidateQueries(['orders']);
+        },
+        onError: () => {
+            enqueueSnackbar('Failed to clear table', { variant: 'error' });
+        }
+    });
+
     const handleClick = (name) => {
         if (status === "Booked") return;
-
         const table = { tableId: id, tableNo: name }
         dispatch(updateTable({ table }))
         navigate(`/menu`);
@@ -28,8 +44,15 @@ const TableCard = ({ id, name, status, initials, seats }) => {
                 <h1 className={`text-white rounded-full p-5 text-xl`} style={{ backgroundColor: initials ? getBgColor() : "#1f1f1f" }} >{getAvatarName(initials) || "N/A"}</h1>
             </div>
             <p className="text-[#ababab] text-xs">Seats: <span className="text-[#f5f5f5]">{seats}</span></p>
+            {status === 'Booked' && orderStatus === 'Ready' && (
+                <button
+                    className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+                    onClick={e => { e.stopPropagation(); clearTable(); }}
+                >
+                    Clear Table
+                </button>
+            )}
         </div>
-
     );
 };
 

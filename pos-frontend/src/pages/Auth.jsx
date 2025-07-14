@@ -24,10 +24,9 @@ const Auth = () => {
 
                 {/* Quote at bottom */}
                 <blockquote className="absolute bottom-10 px-8 mb-10 text-2xl italic text-white">
-                    "Serve customers the best food with prompt and friendly service in a
-                    welcoming atmosphere, and they’ll keep coming back."
+                    "Serve customers the best drinks and bakeries at affordable costs."
                     <br />
-                    <span className="block mt-4 text-yellow-400">- Founder of Cafe</span>
+                    <span className="block mt-4 text-yellow-400">- Sushant Bakery</span>
                 </blockquote>
             </div>
 
@@ -48,11 +47,11 @@ const Auth = () => {
 
 
                 <div className="flex justify-center mt-6">
-                    <p className="text-sm text-[#ababab]">
+                    <p className="text-m text-[#ababab]">
                         {isRegister ? "Already have an account?" : "Don't have an account?"}
                         <a onClick={() => setIsRegister(!isRegister)}
                             className="text-yellow-400 font-semibold hover:underline" href="#">
-                            {isRegister ? "Sign in" : "Sign up"}
+                            {isRegister ? " Sign in" : " Sign up"}
                         </a>
                     </p>
                 </div>

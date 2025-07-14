@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { MdTableBar, MdCategory } from "react-icons/md";
-import { BiSolidDish } from "react-icons/bi";
+import { MdTableBar } from "react-icons/md";
 import Metrics from "../components/dashboard/Metrics";
 import RecentOrders from "../components/dashboard/RecentOrders";
+import Payments from "../components/dashboard/Payments";
 import Modal from "../components/dashboard/Modal";
 
 const buttons = [
     { label: "Add Table", icon: <MdTableBar />, action: "table" },
-    { label: "Add Category", icon: <MdCategory />, action: "category" },
-    { label: "Add Dishes", icon: <BiSolidDish />, action: "dishes" },
+   
 ];
 
 const tabs = ["Metrics", "Orders", "Payments"];
@@ -60,6 +59,7 @@ const Dashboard = () => {
 
             {activeTab === "Metrics" && <Metrics />}
             {activeTab === "Orders" && <RecentOrders />}
+            {activeTab === "Payments" && <Payments />}
 
             {isTableModalOpen && <Modal setIsTableModalOpen={setIsTableModalOpen} />}
         </div>
