@@ -30,7 +30,7 @@ const getTables = async (req, res, next) => {
   try {
     const tables = await Table.find().populate({
       path: 'currentOrder',
-      select: 'customerDetails',
+      select: 'customerDetails orderStatus',
     });
     res.status(200).json({ success: true, data: tables });
   } catch (error) {
@@ -41,25 +41,35 @@ const getTables = async (req, res, next) => {
 const updateTable = async (req, res, next) => {
   try {
     const { status, orderId } = req.body;
-
     const { id } = req.params;
-
     if (!mongoose.Types.ObjectId.isValid(id)) {
       const error = createHttpError(404, 'Invalid id!');
       return next(error);
     }
-
+    // If clearing the table, only allow if order status is 'Ready'
+    if (status === 'Available' && !orderId) {
+      const table = await Table.findById(id);
+      if (table && table.currentOrder) {
+        const Order = require('../models/orderModel');
+        const order = await Order.findById(table.currentOrder);
+        if (order && order.orderStatus !== 'Ready') {
+          const error = createHttpError(400, 'Only orders with status "Ready" can be cleared.');
+          return next(error);
+        }
+        await Order.findByIdAndUpdate(table.currentOrder, {
+          customerDetails: { name: '', guests: 0 }
+        });
+      }
+    }
     const table = await Table.findByIdAndUpdate(
       id,
       { status, currentOrder: orderId },
       { new: true }
     );
-
     if (!table) {
       const error = createHttpError(404, 'Table not found!');
       return error;
     }
-
     res
       .status(200)
       .json({ success: true, message: 'Table updated!', data: table });
