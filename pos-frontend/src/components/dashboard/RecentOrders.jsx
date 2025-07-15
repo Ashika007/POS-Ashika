@@ -64,7 +64,7 @@ const RecentOrders = () => {
                                 className="border-b border-gray-600 hover:bg-[#333]"
                             >
                                 <td className="p-4">#{order._id}</td>
-                                <td className="p-4">{order.customerDetails?.name || 'N/A'}</td>
+                                <td className="p-4">{order.customerDetails?.name && order.customerDetails.name.trim() !== '' ? order.customerDetails.name : (order._doc?.customerDetails?.name && order._doc.customerDetails.name.trim() !== '' ? order._doc.customerDetails.name : 'N/A')}</td>
                                 <td className="p-4">
                                     <select
                                         className={`bg-[#1a1a1a] text-[#f5f5f5] border border-gray-500 p-2 rounded-lg focus:outline-none ${order.orderStatus === "Ready"

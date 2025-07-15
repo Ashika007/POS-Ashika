@@ -52,34 +52,35 @@ const Bill = ({ isEditing, originalOrderId, previousOrder }) => {
             enqueueSnackbar("Please select a payment method!", {
                 variant: "warning",
             });
-
             return;
         }
 
-        if (paymentMethod === "Online") {
+        // Only block for online payment if not confirmed
+        if (paymentMethod === "Online" && !isPaymentConfirmed) {
             // display QR code for online payment
             return;
-        } else {
-            // Place the order or update existing order
-            const orderData = {
-                customerDetails: getCustomerDetails(),
-                orderStatus: "In Progress",
-                bills: {
-                    total: total,
-                    tax: tax,
-                    totalWithTax: totalPriceWithTax,
-                },
-                items: cartData,
-                table: customerData.table.tableId,
-                paymentMethod: paymentMethod,
-            };
-
-            if (isEditing) {
-                orderUpdateMutation.mutate({ orderId: originalOrderId, data: orderData });
-            } else {
-                orderMutation.mutate(orderData);
-            }
         }
+
+        // Place the order or update existing order
+        const orderData = {
+            customerDetails: getCustomerDetails(),
+            orderStatus: "In Progress",
+            bills: {
+                total: total,
+                tax: tax,
+                totalWithTax: totalPriceWithTax,
+            },
+            items: cartData,
+            table: customerData.table.tableId,
+            paymentMethod: paymentMethod,
+        };
+
+        if (isEditing) {
+            orderUpdateMutation.mutate({ orderId: originalOrderId, data: orderData });
+        } else {
+            orderMutation.mutate(orderData);
+        }
+        setIsPaymentConfirmed(false); // Reset after placing order
     };
 
     const orderMutation = useMutation({
@@ -202,7 +203,7 @@ const Bill = ({ isEditing, originalOrderId, previousOrder }) => {
                                 onClick={() => {
                                     setIsPaymentConfirmed(true);
                                     setShowQRImage(false); // Hide the modal
-                                    handlePlaceOrder(); // Place order after confirming
+                                    setTimeout(() => handlePlaceOrder(), 0); // Place order after confirming
                                 }}
                                 className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg text-lg font-semibold transition-all"
                             >

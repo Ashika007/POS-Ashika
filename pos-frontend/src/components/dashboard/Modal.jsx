@@ -74,7 +74,9 @@ const Modal = ({ setIsTableModalOpen }) => {
                         </label>
                         <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
                             <input
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 name="tableNo"
                                 value={tableData.tableNo}
                                 onChange={handleInputChange}
@@ -89,7 +91,9 @@ const Modal = ({ setIsTableModalOpen }) => {
                         </label>
                         <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
                             <input
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 name="seats"
                                 value={tableData.seats}
                                 onChange={handleInputChange}

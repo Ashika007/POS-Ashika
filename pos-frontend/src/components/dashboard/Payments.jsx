@@ -104,7 +104,7 @@ const Payments = () => {
                                     className="border-b border-gray-600 hover:bg-[#333]"
                                 >
                                     <td className="p-4">#{order._id}</td>
-                                    <td className="p-4">{order.customerDetails?.name || 'N/A'}</td>
+                                    <td className="p-4">{order.customerDetails?.name && order.customerDetails.name.trim() !== '' ? order.customerDetails.name : (order._doc?.customerDetails?.name && order._doc.customerDetails.name.trim() !== '' ? order._doc.customerDetails.name : 'N/A')}</td>
                                     <td className="p-4">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                             order.paymentMethod === 'Cash' ? 'bg-green-100 text-green-800' :

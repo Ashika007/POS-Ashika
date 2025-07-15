@@ -221,7 +221,7 @@ export const menus = [
     name: 'Donuts',
     bgColor: '#ff6f91',
     icon: '🍩',
-    items: donut,
+    items: donuts,
   },
   {
     id: 5,
